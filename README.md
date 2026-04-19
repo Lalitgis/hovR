@@ -8,7 +8,7 @@
 
 ---
 
-## 🚀 What hovR does
+## What hovR does
 
 **hovR transforms weeks of manual drone data processing into a fast, reproducible pipeline.**
 
@@ -34,9 +34,9 @@ Dependencies are installed automatically:
 
 ---
 
-## 🧠 Core Modules
+## Core Modules
 
-### 1️⃣ Flight Quality Control
+### 1. Flight Quality Control
 
 Automatically evaluates blur, saturation, irradiance stability, and missing data.
 
@@ -47,7 +47,7 @@ flight_qc_report(qc, "qc_season_2024.html")
 
 ---
 
-### 2️⃣ Calibration Panel Detection
+### 2️. Calibration Panel Detection
 
 No more manual clicking. Panels are detected and used for reflectance calibration.
 
@@ -61,7 +61,7 @@ refl <- calibrate_reflectance(raw_raster, panels,
 
 ---
 
-### 3️⃣ Plot Auto-Segmentation
+### 3️. Plot Auto-Segmentation
 
 Automatically detects trial plots directly from imagery.
 
@@ -77,7 +77,7 @@ sf::st_write(plots, "trial_plots.gpkg")
 
 ---
 
-### 4️⃣ Temporal Intelligence (🚀 Core Innovation)
+### 4️. Temporal Intelligence (🚀 Core Innovation)
 
 Treats all flights as a unified seasonal dataset.
 
@@ -95,7 +95,7 @@ best <- optimal_window(vi, ground_truth = yield_df,
 
 ---
 
-### 5️⃣ Ground Truth Fusion
+### 5️. Ground Truth Fusion
 
 Links drone-derived metrics with field measurements.
 
@@ -111,7 +111,7 @@ fused <- fuse_ground(plot_data,
 
 ---
 
-## 🔄 Complete Workflow
+## Complete Workflow
 
 ```
 Raw drone images
@@ -133,7 +133,7 @@ Modeling (lm / plsr / tidymodels)
 
 ---
 
-## 🌿 Built-in Vegetation Indices
+## Built-in Vegetation Indices
 
 | Index | Purpose                  |
 | ----- | ------------------------ |
@@ -145,11 +145,11 @@ Modeling (lm / plsr / tidymodels)
 | PSRI  | Senescence               |
 | WBI   | Water content            |
 
-➕ Add custom indices with `define_index()`
+Add custom indices with `define_index()`
 
 ---
 
-## 🔬 Why hovR matters
+## Why hovR matters
 
 * 📈 **Seasonal AUC integration** → stronger trait prediction
 * 🤖 **Fully automated pipeline** → eliminates manual bottlenecks
@@ -165,5 +165,5 @@ MIT © 2026 hovR Authors
 ---
 
 <p align="center">
-  Built for precision agriculture, phenomics, and scalable field research 🌍
+  Built for precision agriculture, phenomics, and scalable field research 
 </p>
