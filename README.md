@@ -1,9 +1,9 @@
-# 🌾 hovR
+# hovR
 
 ### *End-to-end R toolkit for drone hyperspectral time-series analysis*
 
 <p align="center">
-  <img src="logo.png" alt="hovR logo" width="180"/>
+  <img src="icon.png" alt="hovR logo" width="180"/>
 </p>
 
 ---
