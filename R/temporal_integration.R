@@ -22,7 +22,7 @@
 #'
 #' @description
 #' Computes the area under the VI curve over the growing season using the
-#' trapezoidal rule. Handles irregular flight spacing — flights do not need
+#' trapezoidal rule. Handles irregular flight spacing - flights do not need
 #' to be evenly spaced. Optionally restricts integration to a phenological
 #' window (e.g. only during grain filling).
 #'
@@ -45,7 +45,7 @@
 #'   (day of year). Controls the time axis unit for the integral.
 #'
 #' @return A single-band \code{terra::SpatRaster} with the seasonal VI integral
-#'   (AUC) at each pixel. Units are VI-units × days (or × doy).
+#'   (AUC) at each pixel. Units are VI-units x days (or x doy).
 #'
 #' @examples
 #' \dontrun{
@@ -130,7 +130,7 @@ integrate_season <- function(vi_stack,
   }
 
   names(auc) <- paste0(index, "_AUC_", units)
-  terra::metags(auc) <- list(
+  attr(auc, "hovR_meta") <- list(
     index     = index,
     method    = method,
     date_from = as.character(min(sel_dates)),
@@ -146,7 +146,7 @@ integrate_season <- function(vi_stack,
 #'
 #' @description
 #' Computes the first temporal derivative of a vegetation index at each pixel:
-#' ΔVI / Δt between consecutive flight dates. Returns a list of rasters, one
+#' DeltaVI / Deltat between consecutive flight dates. Returns a list of rasters, one
 #' per inter-flight interval. Useful for detecting the onset of stress,
 #' rapid green-up, or senescence.
 #'
@@ -264,7 +264,7 @@ optimal_window <- function(vi_stack,
                n_plots = nrow(df))
   })
 
-  # Window (AUC) correlations — all contiguous pairs
+  # Window (AUC) correlations - all contiguous pairs
   window_rows <- list()
   for (i in seq_len(n - 1)) {
     for (j in (i + 1):n) {
@@ -317,8 +317,8 @@ optimal_window <- function(vi_stack,
 #' @param stack A \code{FlightStack} object.
 #' @param bbch_obs A data frame with columns \code{date} (Date) and
 #'   \code{bbch} (character BBCH code). Observations need not coincide with
-#'   flight dates — stages are interpolated to all flight dates.
-#' @param method Interpolation method: \code{"nearest"} (default — assigns
+#'   flight dates - stages are interpolated to all flight dates.
+#' @param method Interpolation method: \code{"nearest"} (default - assigns
 #'   the nearest observed BBCH code to each flight date) or \code{"linear"}
 #'   (linearly interpolates the numeric BBCH code and rounds).
 #'
