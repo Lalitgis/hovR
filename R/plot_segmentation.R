@@ -2,7 +2,7 @@
 #'
 #' @description
 #' Detects and delineates trial plot boundaries directly from a drone
-#' orthomosaic or hyperspectral raster — no manual polygon drawing in
+#' orthomosaic or hyperspectral raster - no manual polygon drawing in
 #' QGIS required. Handles regular grids, misaligned rows, staggered
 #' layouts, and variable plot sizes.
 #'
@@ -19,7 +19,7 @@
 NULL
 
 # ---------------------------------------------------------------------------
-# segment_plots() — main entry point
+# segment_plots() - main entry point
 # ---------------------------------------------------------------------------
 
 #' Automatically segment trial plots from a drone raster
@@ -32,10 +32,10 @@ NULL
 #' @param method Character. Segmentation strategy:
 #'   \describe{
 #'     \item{\code{"profile"}}{(default) Project row/column mean profiles and
-#'       find valleys — fast, works well for regular grids.}
-#'     \item{\code{"gradient"}}{Sobel gradient magnitude to detect alley edges —
+#'       find valleys - fast, works well for regular grids.}
+#'     \item{\code{"gradient"}}{Sobel gradient magnitude to detect alley edges -
 #'       better for irregular or staggered layouts.}
-#'     \item{\code{"combined"}}{Run both methods and take the intersection —
+#'     \item{\code{"combined"}}{Run both methods and take the intersection -
 #'       most robust but slower.}
 #'   }
 #' @param expected_rows Integer. Expected number of plot rows. If \code{NULL}
@@ -62,7 +62,7 @@ NULL
 #'     \item{\code{row_idx}}{Integer row index}
 #'     \item{\code{col_idx}}{Integer column index}
 #'     \item{\code{area_m2}}{Plot area in square metres}
-#'     \item{\code{quality}}{Numeric 0–1: confidence in boundary accuracy}
+#'     \item{\code{quality}}{Numeric 0-1: confidence in boundary accuracy}
 #'     \item{\code{geometry}}{Polygon geometry}
 #'   }
 #'
@@ -119,8 +119,8 @@ segment_plots <- function(raster,
 
   # Step 3: detect gaps via selected method
   cli::cli_inform("Step 3/5: Detecting inter-plot gaps ({method} method)...")
-  res <- terra::res(raster)
-  px_per_m <- 1 / mean(res)
+  raster_res <- terra::res(raster)
+  px_per_m <- 1 / mean(raster_res)
 
   gap_mask <- switch(method,
     profile  = .profile_gaps(contrast, orientation_deg, alley_width_m,
@@ -167,7 +167,7 @@ segment_plots <- function(raster,
 #' @description
 #' Takes an initial polygon layer (e.g. from \code{\link{segment_plots}} or
 #' a hand-drawn shapefile with approximate boundaries) and snaps each edge to
-#' the nearest strong gradient in the raster — analogous to active contour /
+#' the nearest strong gradient in the raster - analogous to active contour /
 #' "snap to edge" in GIS software, but automated.
 #'
 #' @param plots An \code{sf} polygon layer from \code{\link{segment_plots}} or
@@ -175,7 +175,7 @@ segment_plots <- function(raster,
 #' @param raster A \code{terra::SpatRaster} (orthomosaic or contrast index).
 #' @param max_shift_m Numeric. Maximum distance in metres that a boundary edge
 #'   may move during refinement. Default: \code{0.3}.
-#' @param gradient_threshold Numeric 0–1. Minimum normalised gradient magnitude
+#' @param gradient_threshold Numeric 0-1. Minimum normalised gradient magnitude
 #'   to qualify as an edge. Default: \code{0.2}.
 #'
 #' @return A refined \code{sf} polygon layer with the same columns as
@@ -217,7 +217,7 @@ refine_plot_boundaries <- function(plots,
     )
 
     # Compute centroid of strong edges within buffer as shift target
-    edge_pts <- terra::as.data.frame(edge_in_buf, xy = TRUE, na.rm = TRUE)
+    edge_pts <- as.data.frame(edge_in_buf, xy = TRUE, na.rm = TRUE)
     edge_pts <- edge_pts[edge_pts[, 3] == 1, , drop = FALSE]
 
     if (nrow(edge_pts) < 4) {
@@ -262,7 +262,7 @@ refine_plot_boundaries <- function(plots,
 #' @param raster The \code{terra::SpatRaster} used for segmentation.
 #' @param show_ids Logical. Label each plot with its \code{plot_id}.
 #'   Default: \code{TRUE} (suppressed automatically when > 200 plots).
-#' @param quality_threshold Numeric 0–1. Polygons below this quality score
+#' @param quality_threshold Numeric 0-1. Polygons below this quality score
 #'   are highlighted in red. Default: \code{0.5}.
 #'
 #' @return A \code{ggplot} object.
@@ -359,7 +359,7 @@ plot_segmentation_qc <- function(plots,
   angles  <- atan2(terra::values(grad_y, na.rm = FALSE),
                    terra::values(grad_x, na.rm = FALSE)) * 180 / pi
   angles  <- angles[!is.na(angles)]
-  # Histogram of gradient directions — dominant perpendicular = row direction
+  # Histogram of gradient directions - dominant perpendicular = row direction
   hist_r  <- graphics::hist(angles %% 180, breaks = 36, plot = FALSE)
   dominant_angle <- hist_r$mids[which.max(hist_r$counts)]
   (dominant_angle + 90) %% 180
@@ -499,5 +499,9 @@ plot_segmentation_qc <- function(plots,
   hw  <- ceiling(3 * sigma)
   ker <- exp(-(-hw:hw)^2 / (2 * sigma^2))
   ker <- ker / sum(ker)
-  stats::filter(x, ker, sides = 2, circular = FALSE)
+  smoothed <- as.numeric(stats::filter(x, ker, sides = 2))
+  # stats::filter returns NA at edges - fill with original values
+  na_idx <- is.na(smoothed)
+  smoothed[na_idx] <- x[na_idx]
+  smoothed
 }
