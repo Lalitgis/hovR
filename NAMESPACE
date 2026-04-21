@@ -38,24 +38,21 @@ S3method(print, FlightQC)
 
 # --- Imports ---
 importFrom(terra, rast, ext, crs, nlyr, nrow, ncol, values, extract,
-           resample, compareGeom, vect, clamp, writeRaster, metags,
-           NAflag, app, ifel, focal, patches, as.polygons, as.data.frame,
-           mask, crop, global, res, ncell, geom)
+           resample, compareGeom, vect, clamp,
+           app, ifel, focal, patches, as.polygons,
+           mask, crop, global, res, ncell)
 importFrom(sf, st_as_sf, st_is_valid, st_area, st_centroid, st_coordinates,
            st_buffer, st_bbox, st_cast, st_geometry, st_crs, st_transform,
-           st_read, st_write)
-importFrom(dplyr, case_when)
+           st_write)
 importFrom(ggplot2, ggplot, aes, geom_point, geom_smooth, geom_raster,
            geom_sf, geom_sf_label, geom_line, geom_text,
            facet_wrap, labs, theme_minimal, theme, element_blank,
            scale_fill_gradient, scale_fill_gradientn,
            coord_sf, .data)
-importFrom(lubridate, as_date)
 importFrom(cli, cli_abort, cli_warn, cli_inform, cli_h1, cli_bullets,
            cli_dl, cli_progress_bar, cli_progress_update, cli_progress_done)
-importFrom(rlang, .data)
-importFrom(methods, is, new, inherits)
+importFrom(methods, is, new)
 importFrom(stats, setNames, cor.test, approx, sd, median, as.formula,
-           quantile, var, lm, coef, filter)
+           quantile, var, lm, coef)
 importFrom(utils, head)
 importFrom(graphics, hist)
