@@ -13,7 +13,7 @@
 #' @description
 #' Computes summary statistics (mean, sd, median, CV) of VI values within each
 #' plot polygon across all flights. Returns a tidy long-format data frame with
-#' one row per plot × flight × index combination.
+#' one row per plot x flight x index combination.
 #'
 #' @param vi_stack A \code{VIStack} object.
 #' @param plots An \code{sf} polygon layer or \code{terra::SpatVector} with at
