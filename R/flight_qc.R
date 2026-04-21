@@ -4,7 +4,7 @@
 #' After each drone flight, a researcher must check whether the images are
 #' usable: was overlap sufficient? Were there motion-blur artefacts? Was the
 #' sun angle too low? Was irradiance stable? Currently this requires opening
-#' every image manually — a 2-hour job that becomes invisible and error-prone.
+#' every image manually - a 2-hour job that becomes invisible and error-prone.
 #'
 #' \code{flight_qc()} ingests a folder of images or a \code{terra::SpatRaster}
 #' and produces a structured quality report with accept/reject recommendations
@@ -26,10 +26,10 @@ NULL
 #' metrics. Checks include:
 #'
 #' \describe{
-#'   \item{Brightness}{Mean and SD of scene brightness — flags under/overexposure}
-#'   \item{Blur}{Laplacian variance — low values indicate motion blur}
+#'   \item{Brightness}{Mean and SD of scene brightness - flags under/overexposure}
+#'   \item{Blur}{Laplacian variance - low values indicate motion blur}
 #'   \item{Saturation}{Fraction of saturated pixels (> 95th percentile)}
-#'   \item{Irradiance stability}{CV of mean brightness across flight — flags
+#'   \item{Irradiance stability}{CV of mean brightness across flight - flags
 #'     mixed cloud cover during the flight}
 #'   \item{Spatial coverage}{Raster extent and no-data fraction}
 #'   \item{Band completeness}{Whether all expected bands are present}
@@ -41,19 +41,19 @@ NULL
 #'     \item A \code{terra::SpatRaster} (single flight raster), or
 #'     \item A character vector of paths to image files (one per flight image),
 #'       or
-#'     \item A \code{FlightStack} object (multiple flights — runs QC on each).
+#'     \item A \code{FlightStack} object (multiple flights - runs QC on each).
 #'   }
 #' @param flight_date Optional \code{Date} or character. Used for labelling.
 #' @param expected_bands Integer. Expected number of spectral bands. A warning
 #'   is raised if the actual band count differs. Default: \code{NULL} (no check).
 #' @param blur_threshold Numeric. Laplacian variance below this value is
 #'   flagged as blurry. Default: \code{100}.
-#' @param saturation_threshold Numeric 0–1. Fraction of saturated pixels above
+#' @param saturation_threshold Numeric 0-1. Fraction of saturated pixels above
 #'   which a band is flagged. Default: \code{0.02} (2%).
 #' @param irradiance_cv_threshold Numeric. Coefficient of variation of mean
 #'   brightness across flight images. Above this, the flight is flagged as
 #'   having unstable illumination. Default: \code{0.15}.
-#' @param nodata_threshold Numeric 0–1. Maximum acceptable fraction of NA
+#' @param nodata_threshold Numeric 0-1. Maximum acceptable fraction of NA
 #'   pixels. Default: \code{0.10} (10%).
 #'
 #' @return A \code{FlightQC} object (a list with class attribute) containing:
@@ -71,7 +71,7 @@ NULL
 #' qc  <- flight_qc(r, flight_date = "2024-04-10", expected_bands = 5)
 #' print(qc)
 #'
-#' # Full FlightStack — checks all flights at once
+#' # Full FlightStack - checks all flights at once
 #' qc_all <- flight_qc(my_stack)
 #' flight_qc_report(qc_all, output_file = "qc_season_2024.html")
 #' }
@@ -96,7 +96,7 @@ flight_qc <- function(x,
 
   # Dispatch on input type
   if (inherits(x, "FlightStack")) {
-    cli::cli_h1("Flight Quality Assessment — {length(x$rasters)} flights")
+    cli::cli_h1("Flight Quality Assessment - {length(x$rasters)} flights")
     results <- lapply(seq_along(x$rasters), function(i) {
       .qc_single_raster(
         r            = x$rasters[[i]],
@@ -114,7 +114,7 @@ flight_qc <- function(x,
       flight_label = if (!is.null(flight_date)) as.character(flight_date) else "Flight 1"
     ))
   } else if (is.character(x)) {
-    cli::cli_h1("Flight Quality Assessment — {length(x)} image files")
+    cli::cli_h1("Flight Quality Assessment - {length(x)} image files")
     results <- lapply(seq_along(x), function(i) {
       r <- tryCatch(
         terra::rast(x[i]),
@@ -266,11 +266,8 @@ print.FlightQC <- function(x, ...) {
     if (flag_sat)     15 else 0
   )
   overall_score <- max(0, 100 - sum(penalties))
-  recommendation <- dplyr::case_when(
-    overall_score >= 80 ~ "Accept",
-    overall_score >= 50 ~ "Caution",
-    TRUE                ~ "Reject"
-  )
+  recommendation <- ifelse(overall_score >= 80, "Accept",
+                     ifelse(overall_score >= 50, "Caution", "Reject"))
 
   summary_row <- data.frame(
     label           = flight_label,
@@ -464,8 +461,8 @@ print.FlightQC <- function(x, ...) {
 <h2>Decision guide</h2>
 <p>
   <span class="badge accept">Accept</span> Score &ge; 80: no significant issues detected.<br>
-  <span class="badge caution">Caution</span> Score 50&ndash;79: one or more moderate issues — inspect manually before use.<br>
-  <span class="badge reject">Reject</span> Score &lt; 50: multiple or severe issues — do not use without correction.
+  <span class="badge caution">Caution</span> Score 50&ndash;79: one or more moderate issues - inspect manually before use.<br>
+  <span class="badge reject">Reject</span> Score &lt; 50: multiple or severe issues - do not use without correction.
 </p>
 
 <p class="meta">Generated by hovR &bull; ', generated_at, '</p>
