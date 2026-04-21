@@ -6,7 +6,7 @@
 #' panels in the image, reading their known reflectance values, and fitting a
 #' calibration curve. This module automates the entire process.
 #'
-#' Currently this is done by hand — opening each flight's image, manually
+#' Currently this is done by hand - opening each flight's image, manually
 #' clicking on the panels, noting the pixel values, and running a spreadsheet.
 #' For a 10-flight season that is a full day of work. These functions
 #' reduce it to a single function call per flight.
@@ -36,7 +36,7 @@ NULL
 #'   confidence. Default: \code{1}.
 #' @param panel_size_m2 Numeric vector of length 1 or 2. Expected panel area
 #'   in square metres. If length 2, treated as (min, max). Default: \code{c(0.1, 2)}.
-#' @param brightness_quantile Numeric 0–1. Panels are expected to be among the
+#' @param brightness_quantile Numeric 0-1. Panels are expected to be among the
 #'   brightest objects in the scene. Pixels below this brightness quantile are
 #'   excluded before panel search. Default: \code{0.92}.
 #' @param spectral_flatness_threshold Numeric. Maximum allowed coefficient of
@@ -52,7 +52,7 @@ NULL
 #'     \item{\code{brightness}}{Mean brightness across all bands}
 #'     \item{\code{spectral_cv}}{Coefficient of variation across bands (grey flatness)}
 #'     \item{\code{area_m2}}{Detected panel area}
-#'     \item{\code{confidence}}{Numeric 0–1: detection confidence}
+#'     \item{\code{confidence}}{Numeric 0-1: detection confidence}
 #'     \item{\code{geometry}}{Panel polygon}
 #'   }
 #'
@@ -100,7 +100,7 @@ detect_panels <- function(raster,
   })[[1]]
   bright_mask <- terra::ifel(brightness >= bq, 1L, NA)
 
-  # Step 3: Clump connected bright regions → candidate blobs
+  # Step 3: Clump connected bright regions -> candidate blobs
   cli::cli_inform("Step 3/4: Clustering candidate regions...")
   clumps <- terra::patches(bright_mask, directions = 8, allowGaps = FALSE)
 
@@ -195,7 +195,7 @@ detect_panels <- function(raster,
 #' @param raster A \code{terra::SpatRaster} to calibrate (the raw DN image).
 #' @param panels An \code{sf} object from \code{\link{detect_panels}}.
 #' @param known_reflectance Named numeric vector of known panel reflectance
-#'   values (0–1 fraction). Names must match \code{panel_id} values in
+#'   values (0-1 fraction). Names must match \code{panel_id} values in
 #'   \code{panels}. Example: \code{c(panel_1 = 0.50, panel_2 = 0.20)}.
 #'   If a single unnamed value is provided, it is applied to \code{panel_1}.
 #' @param per_band Logical. If \code{TRUE} (default), fits separate calibration
@@ -204,7 +204,7 @@ detect_panels <- function(raster,
 #' @param clamp_output Logical. If \code{TRUE} (default), clamps output
 #'   reflectance to \code{[0, 1]}.
 #'
-#' @return A \code{terra::SpatRaster} with values in units of reflectance (0–1).
+#' @return A \code{terra::SpatRaster} with values in units of reflectance (0-1).
 #'   Calibration coefficients are stored as raster metadata.
 #'
 #' @examples
@@ -300,7 +300,7 @@ calibrate_reflectance <- function(raster,
   names(calib) <- names(raster)
 
   # Store coefficients as metadata
-  terra::metags(calib) <- list(
+  attr(calib, "hovR_meta") <- list(
     calibration_method  = method,
     n_panels            = as.character(length(common_ids)),
     panel_ids           = paste(common_ids, collapse = ","),
