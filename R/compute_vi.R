@@ -9,16 +9,16 @@
 #'
 #' @section Supported built-in indices:
 #' \describe{
-#'   \item{NDVI}{Normalised Difference Vegetation Index — (NIR - Red) / (NIR + Red)}
-#'   \item{NDRE}{Normalised Difference Red-Edge — (NIR - RedEdge) / (NIR + RedEdge)}
-#'   \item{VARI}{Visible Atmospherically Resistant Index — (Green - Red) / (Green + Red - Blue)}
+#'   \item{NDVI}{Normalised Difference Vegetation Index - (NIR - Red) / (NIR + Red)}
+#'   \item{NDRE}{Normalised Difference Red-Edge - (NIR - RedEdge) / (NIR + RedEdge)}
+#'   \item{VARI}{Visible Atmospherically Resistant Index - (Green - Red) / (Green + Red - Blue)}
 #'   \item{MCARI}{Modified Chlorophyll Absorption in Reflectance Index}
-#'   \item{mNDVI705}{Modified NDVI at 705/750 nm — sensitive to chlorophyll in dense canopies}
-#'   \item{LCI}{Leaf Chlorophyll Index — (NIR - RedEdge) / (NIR + Red)}
-#'   \item{GNDVI}{Green NDVI — (NIR - Green) / (NIR + Green)}
-#'   \item{CRI1}{Carotenoid Reflectance Index 1 — (1/Blue) - (1/Green)}
-#'   \item{WBI}{Water Band Index — 900 nm / 970 nm}
-#'   \item{PSRI}{Plant Senescence Reflectance Index — (Red - Blue) / RedEdge}
+#'   \item{mNDVI705}{Modified NDVI at 705/750 nm - sensitive to chlorophyll in dense canopies}
+#'   \item{LCI}{Leaf Chlorophyll Index - (NIR - RedEdge) / (NIR + Red)}
+#'   \item{GNDVI}{Green NDVI - (NIR - Green) / (NIR + Green)}
+#'   \item{CRI1}{Carotenoid Reflectance Index 1 - (1/Blue) - (1/Green)}
+#'   \item{WBI}{Water Band Index - 900 nm / 970 nm}
+#'   \item{PSRI}{Plant Senescence Reflectance Index - (Red - Blue) / RedEdge}
 #' }
 
 # ---- Index definitions (wavelength-based) ----------------------------------
@@ -126,7 +126,7 @@
 #'   all available built-in names. Default is \code{"NDVI"}.
 #' @param custom_index Optional named list defining a custom index. Must contain:
 #'   \describe{
-#'     \item{\code{bands}}{Named numeric vector: band name → centre wavelength (nm)}
+#'     \item{\code{bands}}{Named numeric vector: band name -> centre wavelength (nm)}
 #'     \item{\code{tol}}{Numeric: tolerance in nm for band matching}
 #'     \item{\code{fun}}{Function taking a named list of single-band rasters,
 #'       returning a single-band SpatRaster}
@@ -181,9 +181,8 @@ compute_vi <- function(stack,
       bnds <- .extract_bands(r, def$bands, wl, def$tol)
       vi   <- def$fun(bnds)
       names(vi) <- idx_name
-      if (clamp && grepl("^N", idx_name))   # normalised indices → [-1,1]
+      if (clamp && grepl("^N", idx_name))   # normalised indices -> [-1,1]
         vi <- terra::clamp(vi, lower = -1, upper = 1)
-      terra::NAflag(vi) <- na_val
       cli::cli_progress_update()
       vi
     })
