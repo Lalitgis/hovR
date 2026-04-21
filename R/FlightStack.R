@@ -106,7 +106,11 @@ flight_stack <- function(rasters,
   if (align && length(rasters) > 1) {
     rasters <- lapply(seq_along(rasters), function(i) {
       r <- rasters[[i]]
-      if (!terra::compareGeom(ref, r, stopOnError = FALSE)) {
+      needs_resample <- tryCatch({
+        terra::compareGeom(ref, r, stopOnError = TRUE)
+        FALSE
+      }, error = function(e) TRUE)
+      if (needs_resample) {
         cli::cli_inform("Flight {i} ({dates[i]}): resampling to match reference extent.")
         terra::resample(r, ref, method = "bilinear")
       } else {
