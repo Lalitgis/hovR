@@ -50,7 +50,7 @@ importFrom(ggplot2, ggplot, aes, geom_point, geom_smooth, geom_raster,
            scale_fill_gradient, scale_fill_gradientn,
            coord_sf, .data)
 importFrom(cli, cli_abort, cli_warn, cli_inform, cli_h1, cli_bullets,
-           cli_dl, cli_progress_bar, cli_progress_update, cli_progress_done)
+           cli_dl)
 importFrom(methods, is, new)
 importFrom(stats, setNames, cor.test, approx, sd, median, as.formula,
            quantile, var, lm, coef)
