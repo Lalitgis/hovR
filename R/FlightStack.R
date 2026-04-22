@@ -81,7 +81,7 @@ flight_stack <- function(rasters,
     cli::cli_abort(
       "{.arg dates} length ({length(dates)}) must equal {.arg rasters} length ({length(rasters)}).")
 
-  n_bands <- terra::nlyr(rasters[[1]])
+  n_bands <- as.integer(terra::nlyr(rasters[[1]]))
 
   if (length(wavelengths) != n_bands)
     cli::cli_abort(
@@ -96,7 +96,7 @@ flight_stack <- function(rasters,
       "{.arg meta} must have one row per flight ({length(rasters)} rows required).")
 
   # ---- Check band counts consistent across all rasters --------------------
-  band_counts <- vapply(rasters, terra::nlyr, integer(1))
+  band_counts <- vapply(rasters, function(r) as.integer(terra::nlyr(r)), integer(1))
   if (!all(band_counts == n_bands))
     cli::cli_abort(
       "All rasters must have the same number of bands. Found: {unique(band_counts)}.")
@@ -168,7 +168,7 @@ summary.FlightStack <- function(object, ...) {
     flight     = seq_along(object$rasters),
     date       = object$dates,
     bbch       = if (is.null(object$bbch)) NA_character_ else object$bbch,
-    n_bands    = vapply(object$rasters, terra::nlyr, integer(1)),
+    n_bands    = vapply(object$rasters, function(r) as.integer(terra::nlyr(r)), integer(1)),
     nrow       = vapply(object$rasters, terra::nrow, integer(1)),
     ncol       = vapply(object$rasters, terra::ncol, integer(1))
   )
