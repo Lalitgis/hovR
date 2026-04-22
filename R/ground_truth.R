@@ -46,9 +46,8 @@ extract_plot <- function(vi_stack,
   all_dates <- as.Date(attr(vi_stack, "dates") %||% names(vi_stack[[indices[1]]]))
   rows <- list()
 
-  cli::cli_progress_bar(
-    "Extracting plots",
-    total = length(indices) * length(all_dates)
+  cli::cli_inform(
+    "Extracting plot values for {length(indices)} index/indices across {length(all_dates)} flights..."
   )
 
   for (idx in indices) {
@@ -79,11 +78,9 @@ extract_plot <- function(vi_stack,
         }
         rows[[length(rows) + 1]] <- as.data.frame(row)
       }
-      cli::cli_progress_update()
     }
   }
 
-  cli::cli_progress_done()
   result <- do.call(rbind, rows)
   result$date <- as.Date(result$date)
   result
