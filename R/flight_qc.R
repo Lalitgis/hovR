@@ -217,7 +217,7 @@ print.FlightQC <- function(x, ...) {
 #' @keywords internal
 .qc_single_raster <- function(r, flight_date, params, flight_label) {
 
-  n_bands <- terra::nlyr(r)
+  n_bands <- as.integer(terra::nlyr(r))
   cli::cli_inform("  Checking: {flight_label}")
 
   # 1. Band count check
@@ -340,14 +340,6 @@ print.FlightQC <- function(x, ...) {
 
   icon <- function(flag) if (isTRUE(flag)) "&#x26A0;" else "&#x2713;"
 
-  header_row <- paste0(
-    "<tr>",
-    paste(c("Flight", "Date", "Bands", "No-data %", "Brightness",
-            "Irr. CV", "Blur (Lap.)", "Sat. %",
-            "Blur?", "Nodata?", "Irr.?", "Sat.?", "Score", "Decision"),
-          function(h) paste0("<th>", h, "</th>"), USE.NAMES = FALSE),
-    "</tr>"
-  )
   header_row <- paste0(
     "<tr>",
     "<th>Flight</th><th>Date</th><th>Bands</th><th>No-data %</th>",
