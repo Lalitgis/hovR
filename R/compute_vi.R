@@ -171,8 +171,10 @@ compute_vi <- function(stack,
     cli::cli_abort("Unknown index/indices: {unknown}. See {.fn list_vi} for options.")
 
   wl <- stack$wavelengths
+  total_ops <- length(indices) * length(stack$rasters)
+  counter <- 0
 
-  cli::cli_progress_bar("Computing VIs", total = length(indices) * length(stack$rasters))
+  cli::cli_inform("Computing {length(indices)} index/indices across {length(stack$rasters)} flights ({total_ops} operations)...")
 
   result <- lapply(stats::setNames(nm = indices), function(idx_name) {
     def <- defs[[idx_name]]
@@ -183,13 +185,12 @@ compute_vi <- function(stack,
       names(vi) <- idx_name
       if (clamp && grepl("^N", idx_name))   # normalised indices -> [-1,1]
         vi <- terra::clamp(vi, lower = -1, upper = 1)
-      cli::cli_progress_update()
       vi
     })
+    cli::cli_inform("  - {idx_name} done ({length(per_date)} flights)")
     per_date
   })
 
-  cli::cli_progress_done()
   structure(result, class = "VIStack", dates = stack$dates, indices = indices)
 }
 
