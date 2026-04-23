@@ -169,8 +169,8 @@ summary.FlightStack <- function(object, ...) {
     date       = object$dates,
     bbch       = if (is.null(object$bbch)) NA_character_ else object$bbch,
     n_bands    = vapply(object$rasters, function(r) as.integer(terra::nlyr(r)), integer(1)),
-    nrow       = vapply(object$rasters, terra::nrow, integer(1)),
-    ncol       = vapply(object$rasters, terra::ncol, integer(1))
+    nrow       = vapply(object$rasters, function(r) as.integer(terra::nrow(r)), integer(1)),
+    ncol       = vapply(object$rasters, function(r) as.integer(terra::ncol(r)), integer(1))
   )
   print(df, row.names = FALSE)
   invisible(df)
