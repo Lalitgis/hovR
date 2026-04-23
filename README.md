@@ -1,6 +1,6 @@
 # hovR
 
-### *End-to-end R toolkit for drone hyperspectral time-series analysis*
+### *End-to-end R toolkit for drone based Multi & hyperspectral time-series analysis*
 
 <p align="center">
   <img src="icon.png" alt="hovR logo" width="180"/>
@@ -14,7 +14,7 @@
 
 | Without hovR                            | With hovR                                     |
 | --------------------------------------- | --------------------------------------------- |
-| Draw hundreds of plots manually in QGIS | `segment_plots()` — done in seconds           |
+| Draw research plots manually in QGIS    | `segment_plots()` — its in testing phase      |
 | Manually click calibration panels       | `detect_panels()` + `calibrate_reflectance()` |
 | Trial-and-error flight selection        | `flight_qc()` with automatic report           |
 | Analyze flights one by one              | `integrate_season()` across time              |
@@ -26,7 +26,7 @@
 
 ```r
 # Install from GitHub
-remotes::install_github("dronehsi/hovR")
+remotes::install_github("Lalitgis/hovR")
 ```
 
 Dependencies are installed automatically:
