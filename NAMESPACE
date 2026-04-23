@@ -18,6 +18,8 @@ export(plot_vi_traits)
 export(segment_plots)
 export(refine_plot_boundaries)
 export(plot_segmentation_qc)
+export(generate_plot_grid)
+export(preview_plot_grid)
 
 # --- Calibration panel ---
 export(detect_panels)
@@ -55,4 +57,4 @@ importFrom(methods, is, new)
 importFrom(stats, setNames, cor.test, approx, sd, median, as.formula,
            quantile, var, lm, coef)
 importFrom(utils, head)
-importFrom(graphics, hist)
+importFrom(graphics, hist, text, locator)
