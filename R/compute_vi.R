@@ -18,7 +18,7 @@
 #'   \item{GNDVI}{Green NDVI - (NIR - Green) / (NIR + Green)}
 #'   \item{CRI1}{Carotenoid Reflectance Index 1 - (1/Blue) - (1/Green)}
 #'   \item{WBI}{Water Band Index - 900 nm / 970 nm}
-#'   \item{PSRI}{Plant Senescence Reflectance Index - (Red - Blue) / RedEdge}
+#'   \item{PSRI}{Plant Senescence Reflectance Index (Merzlyak 1999) - (Red - Blue) / 750nm}
 #' }
 
 # ---- Index definitions (wavelength-based) ----------------------------------
@@ -89,10 +89,10 @@
   ),
 
   PSRI = list(
-    bands  = c(Red = 678, Blue = 500, RedEdge = 750),
+    bands  = c(Red = 678, Blue = 500, B750 = 750),
     tol    = 25,
-    fun    = function(b) (b$Red - b$Blue) / b$RedEdge,
-    desc   = "Plant Senescence Reflectance Index"
+    fun    = function(b) (b$Red - b$Blue) / b$B750,
+    desc   = "Plant Senescence Reflectance Index (Merzlyak 1999)"
   )
 )
 
@@ -183,7 +183,10 @@ compute_vi <- function(stack,
       bnds <- .extract_bands(r, def$bands, wl, def$tol)
       vi   <- def$fun(bnds)
       names(vi) <- idx_name
-      if (clamp && grepl("^N", idx_name))   # normalised indices -> [-1,1]
+      # Only clamp indices that are truly bounded to [-1, 1] by formula.
+      # Relying on the name prefix is fragile and misses mNDVI705, GNDVI etc.
+      .normalised_indices <- c("NDVI", "NDRE", "GNDVI", "mNDVI705", "LCI")
+      if (clamp && idx_name %in% .normalised_indices)
         vi <- terra::clamp(vi, lower = -1, upper = 1)
       vi
     })
