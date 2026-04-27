@@ -1,6 +1,6 @@
 # hovR
 
-### *End-to-end R toolkit for drone based Multi & hyperspectral time-series analysis*
+### *R Package for drone based Multi & hyperspectral time-series image analysis*
 
 <p align="center">
   <img src="icon.png" alt="hovR logo" width="180"/>
@@ -22,7 +22,7 @@
 
 ---
 
-## 📦 Installation
+## Installation
 
 ```r
 # Install from GitHub
@@ -77,7 +77,7 @@ sf::st_write(plots, "trial_plots.gpkg")
 
 ---
 
-### 4️. Temporal Intelligence (🚀 Core Innovation)
+### 4️. Temporal Intelligence 
 
 Treats all flights as a unified seasonal dataset.
 
@@ -151,16 +151,16 @@ Add custom indices with `define_index()`
 
 ## Why hovR matters
 
-* 📈 **Seasonal AUC integration** → stronger trait prediction
-* 🤖 **Fully automated pipeline** → eliminates manual bottlenecks
-* 🧪 **Reproducible research workflows**
-* ⏱️ **Saves days to weeks per project**
+* **Seasonal AUC integration** → stronger trait prediction
+* **Fully automated pipeline** → eliminates manual bottlenecks
+* **Reproducible research workflows**
+* **Saves days to weeks per project**
 
 ---
 
-## 📄 License
+## License
 
-MIT © 2026 hovR Authors
+MIT © 2026 hovR Lalit BC
 
 ---
 
