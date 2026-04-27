@@ -42,7 +42,7 @@ S3method(print, FlightQC)
 importFrom(terra, rast, ext, crs, nlyr, nrow, ncol, values, extract,
            resample, compareGeom, vect, clamp,
            app, ifel, focal, patches, as.polygons,
-           mask, crop, global, res, ncell)
+           mask, crop, global, res, ncell, plot)
 importFrom(sf, st_as_sf, st_is_valid, st_area, st_centroid, st_coordinates,
            st_buffer, st_bbox, st_cast, st_geometry, st_crs, st_transform,
            st_write)
@@ -56,5 +56,5 @@ importFrom(cli, cli_abort, cli_warn, cli_inform, cli_h1, cli_bullets,
 importFrom(methods, is, new)
 importFrom(stats, setNames, cor.test, approx, sd, median, as.formula,
            quantile, var, lm, coef)
-importFrom(utils, head)
-importFrom(graphics, hist, text, locator)
+importFrom(utils, head, browseURL, writeLines)
+importFrom(graphics, hist, text, locator, plot)
