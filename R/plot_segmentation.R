@@ -368,7 +368,7 @@ plot_segmentation_qc <- function(plots,
 #' @keywords internal
 .profile_gaps <- function(contrast, orientation_deg, alley_width_m,
                            px_per_m, smooth_sigma) {
-  m   <- as.matrix(contrast, wide = TRUE)
+  m   <- matrix(terra::values(contrast), nrow = terra::nrow(contrast), byrow = TRUE)
   m[is.na(m)] <- 0
 
   # Row-wise and column-wise mean profiles
