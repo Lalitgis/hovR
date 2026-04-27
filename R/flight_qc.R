@@ -229,14 +229,19 @@ print.FlightQC <- function(x, ...) {
   nodata_frac  <- na_count / total_cells
   flag_nodata  <- nodata_frac > params$nodata_threshold
 
-  # 3. Brightness (mean of band means)
+  # 3. Brightness per band
   band_means <- unlist(terra::global(r, "mean", na.rm = TRUE))
   mean_bright <- mean(band_means, na.rm = TRUE)
-  sd_bright   <- stats::sd(band_means, na.rm = TRUE)
 
-  # 4. Irradiance stability (CV across bands as proxy for mixed cloud)
-  irr_cv      <- if (mean_bright > 0) sd_bright / mean_bright else NA_real_
-  flag_irr    <- !is.na(irr_cv) && irr_cv > params$irradiance_cv_threshold
+  # 4. Irradiance stability: spatial CV within each band (averaged across bands).
+  #    Using the CV of band means directly is wrong for multispectral sensors
+  #    because NIR is inherently 3-5x brighter than visible bands, making
+  #    inter-band CV always high regardless of illumination quality.
+  #    Instead we use the mean of per-band spatial coefficient of variation.
+  band_sds  <- unlist(terra::global(r, "sd", na.rm = TRUE))
+  band_cvs  <- ifelse(band_means > 0, band_sds / band_means, NA_real_)
+  irr_cv    <- mean(band_cvs, na.rm = TRUE)
+  flag_irr  <- !is.na(irr_cv) && irr_cv > params$irradiance_cv_threshold
 
   # 5. Blur (Laplacian variance on first band)
   lap_var <- tryCatch({
