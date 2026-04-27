@@ -95,14 +95,14 @@ detect_panels <- function(raster,
 
   # Step 2: Threshold to bright candidate pixels
   cli::cli_inform("Step 2/4: Isolating bright candidate pixels...")
-  bq  <- terra::global(brightness, fun = function(x) {
-    stats::quantile(x, brightness_quantile, na.rm = TRUE)
-  })[[1]]
+  bq  <- as.numeric(terra::global(brightness, fun = stats::quantile,
+                                   probs = brightness_quantile,
+                                   na.rm = TRUE)[[1]])
   bright_mask <- terra::ifel(brightness >= bq, 1L, NA)
 
   # Step 3: Clump connected bright regions -> candidate blobs
   cli::cli_inform("Step 3/4: Clustering candidate regions...")
-  clumps <- terra::patches(bright_mask, directions = 8, allowGaps = FALSE)
+  clumps <- terra::patches(bright_mask, directions = 8, zeroAsNA = TRUE)
 
   # Convert clumps to polygons
   clump_polys <- terra::as.polygons(clumps, dissolve = FALSE)
