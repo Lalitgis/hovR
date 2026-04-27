@@ -82,9 +82,11 @@ integrate_season <- function(vi_stack,
     if (is.null(stack$bbch))
       cli::cli_abort("FlightStack has no BBCH stage labels. Run {.fn phenostage_tag} first.")
     if (!is.null(bbch_from))
-      date_from <- min(stack$dates[stack$bbch >= bbch_from], na.rm = TRUE)
+      date_from <- min(stack$dates[as.integer(stack$bbch) >= as.integer(bbch_from)],
+                       na.rm = TRUE)
     if (!is.null(bbch_to))
-      date_to   <- max(stack$dates[stack$bbch <= bbch_to],   na.rm = TRUE)
+      date_to   <- max(stack$dates[as.integer(stack$bbch) <= as.integer(bbch_to)],
+                       na.rm = TRUE)
     cli::cli_inform("BBCH window resolved: {date_from} to {date_to}")
   }
 
@@ -401,3 +403,6 @@ phenostage_tag <- function(stack,
 
 #' @keywords internal
 `%||%` <- function(a, b) if (!is.null(a)) a else b
+
+#' @keywords internal
+.bbch_as_int <- function(x) suppressWarnings(as.integer(x))
